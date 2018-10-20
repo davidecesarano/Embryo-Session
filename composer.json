@@ -1,0 +1,30 @@
+{
+    "name": "davidecesarano/embryo-session",
+    "type": "library",
+    "description": "A PSR-7 implementation for HTTP messages and factory.",
+    "keywords": [
+        "php",
+        "psr-7",
+        "psr-17",
+        "http-message",
+        "http-factory"
+    ],
+    "homepage": "https://github.com/davidecesarano/embryo-session",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Davide Cesarano",
+            "homepage": "https://github.com/davidecesarano"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "davidecesarano/embryo-http": "dev-master",
+        "davidecesarano/embryo-middleware": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Embryo\\": "Embryo/"
+        }
+    }
+}
