@@ -1,4 +1,4 @@
-<?php 
+<?php
 
     require __DIR__ . '/../vendor/autoload.php';
     
@@ -13,12 +13,11 @@
     $request = (new ServerRequestFactory)->createServerRequestFromServer();
     $response = (new ResponseFactory)->createResponse(200);
 
-    class TestSetSessionMiddleware implements MiddlewareInterface
+    class TestGetSessionMiddleware implements MiddlewareInterface
     {
         public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
         {
             $session = $request->getAttribute('session');
-            $session->set('name', 'World');
             $response = $handler->handle($request);
             return $response->write('Hello '.$session->get('name'));
         }
@@ -26,5 +25,5 @@
 
     $middleware = new MiddlewareDispatcher;
     $middleware->add(SessionMiddleware::class);
-    $middleware->add(TestSetSessionMiddleware::class);
+    $middleware->add(TestGetSessionMiddleware::class);
     $response = $middleware->dispatch($request, $response);
