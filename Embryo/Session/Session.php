@@ -1,61 +1,102 @@
 <?php 
 
+    /**
+     * Session
+     * 
+     * Class to start PHP Session.
+     * 
+     * @author Davide Cesarano <davide.cesarano@unipegaso.it>
+     * @link   https://github.com/davidecesarano/embryo-session
+     */
+
     namespace Embryo\Session;
+
+    use Embryo\Session\SessionCollectionTrait;
 
     class Session 
     {
-        private $id;
-        private $options = [];
-        private $data = [];
+        use SessionCollectionTrait;
 
-        public function __construct(string $id, array $options)
+        /**
+         * @var string $id
+         */
+        protected $id;
+        
+        /**
+         * @var string $name
+         */
+        protected $name;
+
+        /**
+         * @var array $array
+         */
+        protected $options = [];
+
+        /**
+         * @var array $data
+         */
+        protected $data = [];
+
+        /**
+         * Starts session with specific
+         * id, name and options.
+         *
+         * @param string $id
+         * @param string $name
+         * @param array $options
+         * @throws RuntimeException
+         */
+        public function __construct(string $id, string $name = 'PHPSESSID', array $options = [])
         {
-            if (session_status() === PHP_SESSION_DISABLED) {
+            if ($this->disabled()) {
                 throw new \RuntimeException('PHP sessions are disabled');
             }
             
-            if (session_status() === PHP_SESSION_ACTIVE) {
+            if ($this->active()) {
                 throw new \RuntimeException('Failed to start the session: already started by PHP.');
             }
 
+            session_name($name);
             session_id($id);
             session_start($options);
 
+            $this->name    = $name;
             $this->id      = $id;
             $this->options = $options;
             $this->data    = $_SESSION;
         }
 
-        public function save($name): void
+        /**
+         * Save and close session.
+         *
+         * @return void
+         */
+        public function save(): void
         {
-            if ((session_status() === PHP_SESSION_ACTIVE) && (session_name() === $name)) {
-                $_SESSION = $this->data;
+            if ($this->active() && session_name() == $this->name()) {
+                $_SESSION = $this->all();
                 session_write_close();
             }
         }
-
-        public function id(): string
+        
+        /**
+         * Checks if sessions are disabled.
+         *
+         * @return bool
+         */
+        private function disabled(): bool
         {
-            return $this->id;
+            return session_status() === PHP_SESSION_DISABLED;
         }
 
-        public function get(string $name, $default = null)
+        /**
+         * Checks if sessions are enabled, 
+         * and one exists.
+         *
+         * @return bool
+         */
+        private function active(): bool
         {
-            return $this->data[$name];
-        }
-
-        public function set($name, $value)
-        {
-            $this->data[$name] = $value;
-        }
-
-        public function all(): array
-        {
-            return $this->data;
-        }
-
-        public function has(string $name)
-        {
-
+            return session_status() === PHP_SESSION_ACTIVE;
         }
     }
