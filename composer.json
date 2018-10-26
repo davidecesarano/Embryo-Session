@@ -22,6 +22,9 @@
         "davidecesarano/embryo-http": "dev-master",
         "davidecesarano/embryo-middleware": "dev-master"
     },
+    "require-dev": {
+        "davidecesarano/embryo-emitter": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "Embryo\\": "Embryo/"
