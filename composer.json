@@ -1,13 +1,12 @@
 {
     "name": "davidecesarano/embryo-session",
     "type": "library",
-    "description": "A PSR-7 implementation for HTTP messages and factory.",
+    "description": "PSR-15 middleware to create a php session using the PSR-7 request.",
     "keywords": [
         "php",
         "psr-7",
-        "psr-17",
-        "http-message",
-        "http-factory"
+        "psr-15",
+        "session"
     ],
     "homepage": "https://github.com/davidecesarano/embryo-session",
     "license": "MIT",
