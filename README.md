@@ -63,3 +63,49 @@ The session name. If it's not provided, use the php's default.
 
 ### `seOptions(string $name)`
 Array of options passed to `session_start()`.
+
+## Collection
+### Retrieving data
+You may retrieve an item from the session and you may also pass a default value as the second argument to the `get` method:
+```php
+$session->get('key', 'default');
+```
+
+### Retrieving all session data
+If you would like to retrieve all the data in the session, you may use the `all` method:
+```php
+$session->all();
+```
+
+### Determining if an item exists in the session
+To determine if an item is present in the session, you may use the `has` method. The has method returns `true` if the item is present and is not `null`:
+```php
+if ($session->has('key')) {
+    //...
+}
+```
+
+### Storing data
+The `set` method may be used to set a new value onto a session:
+```php
+$session->set('name', 'value');
+```
+
+### Flash data
+You may wish to store items in the session only for the next request using the `flash` method:
+```php
+$session->flash('name', 'value');
+```
+
+### Deleting data
+The `remove` method will remove a piece of data from the session. If you would like the remove all data from the session, you may use the `clear` method:
+```php
+$session->remove('name');
+$session->clear();
+```
+
+### Regenerating the session id
+If you need the regenerating session id, you may user `regenerate` method:
+```php
+$session->regenerate();
+```
