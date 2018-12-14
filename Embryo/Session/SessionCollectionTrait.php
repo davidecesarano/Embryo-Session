@@ -136,4 +136,27 @@
         {
             $this->data = [];
         }
+
+        /**
+         * Write data to inaccessible properties.
+         * 
+         * @param string $name 
+         * @param mixed $value
+         * @return void
+         */
+        public function __set($name, $value): void 
+        {
+            $this->set($name, $value);
+        }
+
+        /**
+         * Read data from inaccessible properties. 
+         *
+         * @param string $name
+         * @return mixed
+         */
+        public function __get($name)
+        {
+            $this->get($name);
+        }
     }
