@@ -1,4 +1,4 @@
-# Embryo-Session
+# Embryo Session
 Middleware to start a php session using the request data and close it after return the response.
 
 ## Requirements
