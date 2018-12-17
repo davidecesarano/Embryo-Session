@@ -51,11 +51,11 @@ $response = $middleware->dispatch($request, $response);
 ```
 
 ## Example
-You may quickly test this using the built-in PHP server:
+You may quickly test this using the built-in PHP server going to http://localhost:8000.
 ```
+$ cd example
 $ php -S localhost:8000
 ```
-Going to http://localhost:8000/example/ will now display "Hello world".
 
 ## Options
 ### `setName(string $name)`
