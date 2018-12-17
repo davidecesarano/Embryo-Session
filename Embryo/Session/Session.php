@@ -11,7 +11,7 @@
 
     namespace Embryo\Session;
 
-    use Embryo\Session\SessionCollectionTrait;
+    use Embryo\Session\Traits\SessionCollectionTrait;
 
     class Session 
     {
