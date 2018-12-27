@@ -3,7 +3,7 @@ Middleware to start a php session using the request data and close it after retu
 
 ## Requirements
 * PHP >= 7.1
-* A [PSR-7](https://www.php-fig.org/psr/psr-7/) http message implementation (ex. [Embryo-Http](https://github.com/davidecesarano/embryo-http))
+* A [PSR-7](https://www.php-fig.org/psr/psr-7/) http message implementation and [PSR-17](https://www.php-fig.org/psr/psr-17/) http factory implementation (ex. [Embryo-Http](https://github.com/davidecesarano/Embryo-Http))
 * A [PSR-15](https://www.php-fig.org/psr/psr-15/) http server request implementation (ex. [Embryo-Middleware](https://github.com/davidecesarano/embryo-middleware))
 
 ## Installation
@@ -40,11 +40,16 @@ class TestGetSessionMiddleware implements MiddlewareInterface
 ```
 Adds middleware to dispatcher:
 ```php
+$session = new Session;
 $middleware = new MiddlewareDispatcher;
-$middleware->add((new SessionMiddleware)->setOptions([
-    'use_cookies'      => false,
-    'use_only_cookies' => true
-]));
+$middleware->add(
+    (new SessionMiddleware)
+        ->setSession($session)
+        ->setOptions([
+            'use_cookies'      => false,
+            'use_only_cookies' => true
+        ])
+);
 $middleware->add(TestSetSessionMiddleware::class);
 $middleware->add(TestGetSessionMiddleware::class);
 $response = $middleware->dispatch($request, $response);
@@ -58,11 +63,17 @@ $ php -S localhost:8000
 ```
 
 ## Options
+### `setSession(Session $session)`
+The `Embryo\Session\Session` object.
+
 ### `setName(string $name)`
 The session name. If it's not provided, use the php's default.
 
-### `seOptions(string $name)`
+### `seOptions(array $options = [])`
 Array of options passed to `session_start()`.
+
+### `setSessionRequestAttribute(string $name)`
+The session request attribute. If it's not provided, use `$request->getAttribute('session')`.
 
 ## Collection
 ### Retrieving data
