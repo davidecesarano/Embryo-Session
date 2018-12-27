@@ -5,14 +5,17 @@
     use Embryo\Http\Emitter\Emitter;
     use Embryo\Http\Server\MiddlewareDispatcher;
     use Embryo\Http\Factory\{ServerRequestFactory, ResponseFactory};
+    use Embryo\Session\Session;
     use Embryo\Session\Middleware\SessionMiddleware;
     use Psr\Http\Message\ResponseInterface;
     use Psr\Http\Message\ServerRequestInterface;
     use Psr\Http\Server\MiddlewareInterface;
     use Psr\Http\Server\RequestHandlerInterface;
 
-    $request = (new ServerRequestFactory)->createServerRequestFromServer();
-    $response = (new ResponseFactory)->createResponse(200);
+    $request    = (new ServerRequestFactory)->createServerRequestFromServer();
+    $response   = (new ResponseFactory)->createResponse(200);
+    $middleware = new MiddlewareDispatcher;
+    $session    = new Session;
 
     class TestGetSessionMiddleware implements MiddlewareInterface
     {
@@ -24,11 +27,14 @@
         }
     }
 
-    $middleware = new MiddlewareDispatcher;
-    $middleware->add((new SessionMiddleware)->setOptions([
-        'use_cookies'      => false,
-        'use_only_cookies' => true
-    ]));
+    $middleware->add(
+        (new SessionMiddleware)
+            ->setSession($session)
+            ->setOptions([
+                'use_cookies'      => false,
+                'use_only_cookies' => true
+            ])
+    );
     $middleware->add(TestGetSessionMiddleware::class);
     $response = $middleware->dispatch($request, $response);
 
