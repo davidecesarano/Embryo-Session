@@ -21,6 +21,11 @@
     class SessionMiddleware implements MiddlewareInterface
     {
         /**
+         * @var Session $session
+         */
+        private $session;
+
+        /**
          * @var string $name
          */
         private $name = 'PHPSESSID';
@@ -29,6 +34,23 @@
          * @var array $options
          */
         private $options = [];
+
+        /**
+         * @var string $sessionRequestAttribute
+         */
+        private $sessionRequestAttribute = 'session';
+
+        /**
+         * Set session.
+         *
+         * @param Session $session
+         * @return self
+         */
+        public function setSession(Session $session): self
+        {
+            $this->session = $session;
+            return $this;
+        }
 
         /**
          * Sets session name.
@@ -55,6 +77,18 @@
         }
 
         /**
+         * Set session request attribute.
+         *
+         * @param string $name
+         * @return self
+         */
+        public function setSessionRequestAttribute(string $name): self
+        {
+            $this->sessionRequestAttribute = $name;
+            return $this;
+        }
+
+        /**
          * Process a server request and return a response.
          *
          * @param ServerRequestInterface $request
@@ -67,9 +101,9 @@
             $name     = $this->name ?: session_name();
             $id       = $cookies[$name] ?? bin2hex(random_bytes(16));
             $options  = $this->options;
-            $session  = new Session($id, $name, $options);
+            $session  = $this->session->start($id, $name, $options);
             
-            $request  = $request->withAttribute('session', $session);
+            $request  = $request->withAttribute($this->sessionRequestAttribute, $session);
             $response = $handler->handle($request);
             $session->save();
             
