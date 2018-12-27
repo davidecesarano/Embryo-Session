@@ -19,9 +19,7 @@
     "require": {
         "php": ">=7.1",
         "davidecesarano/embryo-http": "dev-master",
-        "davidecesarano/embryo-middleware": "dev-master"
-    },
-    "require-dev": {
+        "davidecesarano/embryo-middleware": "dev-master",
         "davidecesarano/embryo-emitter": "dev-master"
     },
     "autoload": {
