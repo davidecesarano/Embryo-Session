@@ -46,7 +46,7 @@
          * @param array $options
          * @throws RuntimeException
          */
-        public function __construct(string $id, string $name = 'PHPSESSID', array $options = [])
+        public function start(string $id, string $name = 'PHPSESSID', array $options = []): self
         {
             if ($this->disabled()) {
                 throw new \RuntimeException('PHP sessions are disabled');
@@ -64,6 +64,7 @@
             $this->id      = $id;
             $this->options = $options;
             $this->data    = $_SESSION;
+            return $this;
         }
 
         /**
