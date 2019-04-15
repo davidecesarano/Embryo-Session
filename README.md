@@ -41,7 +41,7 @@ class TestGetSessionMiddleware implements MiddlewareInterface
 Adds middleware to dispatcher:
 ```php
 $session = new Session;
-$middleware = new MiddlewareDispatcher;
+$middleware = new RequestHandler;
 $middleware->add(
     (new SessionMiddleware)
         ->setSession($session)
