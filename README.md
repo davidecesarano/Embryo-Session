@@ -55,16 +55,7 @@ $middleware->add(TestGetSessionMiddleware::class);
 $response = $middleware->dispatch($request, $response);
 ```
 
-## Example
-You may quickly test this using the built-in PHP server going to http://localhost:8000.
-```
-$ cd example
-$ php -S localhost:8000
-```
-
 ## Options
-### `setSession(Session $session)`
-The `Embryo\Session\Session` object.
 
 ### `setName(string $name)`
 The session name. If it's not provided, use the php's default.
@@ -113,10 +104,4 @@ The `remove` method will remove a piece of data from the session. If you would l
 ```php
 $session->remove('name');
 $session->clear();
-```
-
-### Regenerating the session id
-If you need the regenerating session id, you may user `regenerate` method:
-```php
-$session->regenerate();
 ```
