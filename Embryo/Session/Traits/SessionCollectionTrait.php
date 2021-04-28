@@ -18,19 +18,9 @@
          *
          * @return string
          */
-        public function id(): string
+        public function getId(): string
         {
             return $this->id;
-        }
-
-        /**
-         * Regenerate session id.
-         *
-         * @return void
-         */
-        public function regenerate(): void
-        {
-            session_regenerate_id(true);
         }
 
         /**
@@ -38,7 +28,7 @@
          *
          * @return string
          */
-        public function name(): string 
+        public function getName(): string 
         {
             return $this->name;
         }
@@ -52,7 +42,18 @@
          */
         public function get(string $name, $default = null)
         {
-            return $this->has($name) ? $this->data[$name] : $default;
+            if ($this->has($name)) {
+                return $this->data[$name];
+            }
+
+            $flash_name = $name.'__flash';
+            if ($this->has($flash_name)) {
+                $flash_value = $this->data[$flash_name];
+                $this->remove($flash_name);
+                return $flash_value;
+            }
+            
+            return $default;
         }
 
         /**
@@ -97,6 +98,7 @@
          */
         public function flash(string $name, $value): void
         {
+            $name = $name.'__flash';
             if ($this->has($name)) {
                 $this->remove($name);
             } else {

@@ -28,7 +28,7 @@
         protected $name;
 
         /**
-         * @var array $array
+         * @var array $options
          */
         protected $options = [];
 
@@ -44,15 +44,15 @@
          * @param string $id
          * @param string $name
          * @param array $options
-         * @throws RuntimeException
+         * @throws \RuntimeException
          */
         public function start(string $id, string $name = 'PHPSESSID', array $options = []): self
         {
-            if ($this->disabled()) {
+            if ($this->isDisabled()) {
                 throw new \RuntimeException('PHP sessions are disabled');
             }
             
-            if ($this->active()) {
+            if ($this->isActive()) {
                 throw new \RuntimeException('Failed to start the session: already started by PHP.');
             }
 
@@ -68,13 +68,24 @@
         }
 
         /**
+         * Returns an array with the current 
+         * session cookie information.
+         * 
+         * @return array
+         */
+        public function getCookieParams(): array
+        {
+            return session_get_cookie_params();
+        }
+
+        /**
          * Save and close session.
          *
          * @return void
          */
         public function save(): void
         {
-            if ($this->active() && session_name() == $this->name()) {
+            if ($this->isActive() && session_name() == $this->getName()) {
                 $_SESSION = $this->all();
                 session_write_close();
             }
@@ -85,7 +96,7 @@
          *
          * @return bool
          */
-        private function disabled(): bool
+        private function isDisabled(): bool
         {
             return session_status() === PHP_SESSION_DISABLED;
         }
@@ -96,8 +107,26 @@
          *
          * @return bool
          */
-        private function active(): bool
+        private function isActive(): bool
         {
             return session_status() === PHP_SESSION_ACTIVE;
+        }
+
+        /**
+         * Generate a random id.
+         * 
+         * @param int $length
+         * @return string
+         */
+        public static function generateId(int $length = 64): string
+        {
+            $id = '';
+            $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'), ['-', ',']);
+            $max = count($characters) - 1;
+            for ($i = 0; $i < $length; $i++) {
+                $rand = mt_rand(0, $max);
+                $id .= $characters[$rand];
+            }
+            return $id;
         }
     }
